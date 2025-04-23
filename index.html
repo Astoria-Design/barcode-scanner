@@ -9,12 +9,12 @@
         body {
             background-color: #f4f4f9;  /* Fondo suave y profesional */
             font-family: Arial, sans-serif;  /* Fuente limpia y moderna */
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;  /* Cambio para que los elementos se alineen desde el principio */
-            height: 100vh;
             margin: 0;
             padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
             flex-direction: column;
         }
         .container {
@@ -26,7 +26,8 @@
             width: 100%;
             max-width: 500px;
             box-sizing: border-box;
-            overflow: hidden; /* Prevenir que los elementos se desborden */
+            overflow: hidden;
+            position: relative; /* Para controlar el flujo de los elementos */
         }
         h1 {
             color: #333;
@@ -41,7 +42,7 @@
             cursor: pointer;
             font-size: 16px;
             margin-top: 20px;
-            width: 100%;  /* Asegura que el botón no se corte */
+            width: 100%;
         }
         button:hover {
             background-color: #45a049;
@@ -55,11 +56,11 @@
         #barcode-scanner {
             margin-top: 20px;
             width: 100%;
-            height: 300px;  /* Se da una altura fija para evitar el desplazamiento */
+            height: 300px; /* Altura fija para evitar desplazamientos */
             border-radius: 8px;
             background-color: #f4f4f4;
             margin-bottom: 20px;
-            box-sizing: border-box;
+            position: relative; /* Fija el área de la cámara */
         }
 
         /* Medias Queries para dispositivos pequeños */
@@ -178,4 +179,3 @@
     </script>
 </body>
 </html>
-
