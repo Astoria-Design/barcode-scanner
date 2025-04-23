@@ -14,6 +14,7 @@
             align-items: center;
             height: 100vh; /* Asegura que se ocupa toda la pantalla */
             margin: 0;
+            padding: 0;
         }
         .container {
             background-color: white;
@@ -21,8 +22,9 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave para darle profundidad */
             padding: 20px;
             text-align: center;
-            width: 90%;
+            width: 100%;
             max-width: 500px;
+            box-sizing: border-box;
         }
         h1 {
             color: #333;
@@ -31,12 +33,13 @@
         button {
             background-color: #4CAF50;  /* Verde para un botón profesional */
             color: white;
-            padding: 10px 20px;
+            padding: 12px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
             margin-top: 20px;
+            width: 100%;  /* Asegura que el botón no se corte */
         }
         button:hover {
             background-color: #45a049;
@@ -53,6 +56,33 @@
             height: 300px;
             border-radius: 8px;
             background-color: #f4f4f4;
+            margin-bottom: 20px;
+        }
+
+        /* Medias Queries para dispositivos pequeños */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+                width: 100%;
+                max-width: 100%; /* Asegura que la caja sea completamente responsiva */
+            }
+            h1 {
+                font-size: 1.5em; /* Ajusta el tamaño del título para pantallas más pequeñas */
+            }
+            button {
+                font-size: 14px;  /* Ajusta el tamaño del botón para pantallas pequeñas */
+                padding: 10px 15px;
+            }
+        }
+
+        /* Estilo adicional para pantallas extremadamente pequeñas (móviles muy pequeños) */
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 1.2em; /* Ajusta aún más el título */
+            }
         }
     </style>
 </head>
