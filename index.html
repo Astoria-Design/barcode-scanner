@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Escáner de Códigos de Barras</title>
+    <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
+</head>
+<body>
+    <h1>Escanea el Código de Barras</h1>
+    <div id="barcode-scanner" style="width: 100%; height: 300px;"></div>
+    <br>
+    <button onclick="sendDataToSheet()">Enviar a Inventario</button>
+
+    <script>
+        var scannedBarcode = "";
+
+        // Configura Quagga para iniciar el escaneo con la cámara
+        Quagga.init({
+            inputStream: {
+                name: "Live",
+                type: "LiveStream",
+                target: document.querySelector('#barcode-scanner'),  // Div donde se muestra la cámara
+                constraints: {
+                    facingMode: "environment"  // Usa la cámara trasera del dispositivo
+                }
+            },
+            decoder: {
+                readers: ["code_128_reader", "ean_reader", "ean_13_reader", "upc_reader", "qr_reader"]  // Tipos de códigos que puedes escanear
+            }
+        }, function(err) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            Quagga.start();
+        });
+
+        // Cuando Quagga detecte un código de barras
+        Quagga.onDetected(function(result) {
+            scannedBarcode = result.codeResult.code;
+            alert("Código escaneado: " + scannedBarcode);
+        });
+
+        // Función para enviar los datos escaneados a Google Sheets
+        function sendDataToSheet() {
+            var data = {
+                barcode: scannedBarcode,
+                productName: "Producto de ejemplo",  // Aquí puedes personalizar el nombre del producto o añadir un campo manual
+                quantity: 1,  // Cantidad por defecto
+                notes: ""  // Notas opcionales
+            };
+
+            // URL de tu Google Apps Script para guardar en Google Sheets
+            var url = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';  // Reemplaza con tu Script ID
+
+            var options = {
+                "method": "post",
+                "contentType": "application/json",
+                "payload": JSON.stringify(data)
+            };
+
+            // Enviar los datos a Google Sheets
+            fetch(url, options)
+                .then(response => response.text())
+                .then(responseText => {
+                    alert('Datos enviados con éxito: ' + responseText);
+                })
+                .catch(error => {
+                    alert('Error al enviar los datos: ' + error);
+                });
+        }
+    </script>
+</body>
+</html>
