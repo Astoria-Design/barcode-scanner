@@ -2,14 +2,68 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escáner de Códigos de Barras</title>
     <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
+    <style>
+        body {
+            background-color: #f4f4f9;  /* Fondo suave y profesional */
+            font-family: Arial, sans-serif;  /* Fuente limpia y moderna */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Asegura que se ocupa toda la pantalla */
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave para darle profundidad */
+            padding: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #4CAF50;  /* Verde para un botón profesional */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #confirmationMessage {
+            display: none;
+            margin-top: 20px;
+            color: #4CAF50;  /* Verde para el mensaje de éxito */
+            font-size: 16px;
+        }
+        #barcode-scanner {
+            margin-top: 20px;
+            width: 100%;
+            height: 300px;
+            border-radius: 8px;
+            background-color: #f4f4f4;
+        }
+    </style>
 </head>
 <body>
-    <h1>Escanea el Código de Barras</h1>
-    <div id="barcode-scanner" style="width: 100%; height: 300px;"></div>
-    <br>
-    <button onclick="sendDataToSheet()">Enviar a Inventario</button>
+    <div class="container">
+        <h1>Escáner de Códigos de Barras</h1>
+        <div id="barcode-scanner"></div>
+        <br>
+        <button onclick="sendDataToSheet()">Enviar Código</button>
+        <div id="confirmationMessage">¡Código escaneado y enviado con éxito!</div>
+    </div>
 
     <script>
         var scannedBarcode = "";
@@ -38,14 +92,19 @@
         // Cuando Quagga detecte un código de barras
         Quagga.onDetected(function(result) {
             scannedBarcode = result.codeResult.code;
-            alert("Código escaneado: " + scannedBarcode);
+            console.log("Código escaneado: " + scannedBarcode);
         });
 
         // Función para enviar los datos escaneados a Google Sheets
         function sendDataToSheet() {
+            if (!scannedBarcode) {
+                alert('Por favor, escanea un código de barras primero.');
+                return;
+            }
+
             var data = {
                 barcode: scannedBarcode,
-                productName: "Producto de ejemplo",  // Aquí puedes personalizar el nombre del producto o añadir un campo manual
+                productName: "Producto de ejemplo",  // Aquí puedes personalizar el nombre del producto
                 quantity: 1,  // Cantidad por defecto
                 notes: ""  // Notas opcionales
             };
@@ -63,11 +122,22 @@
             fetch(url, options)
                 .then(response => response.text())
                 .then(responseText => {
-                    alert('Datos enviados con éxito: ' + responseText);
+                    console.log('Datos enviados con éxito: ' + responseText);
+                    showConfirmationMessage();  // Mostrar mensaje de confirmación
                 })
                 .catch(error => {
                     alert('Error al enviar los datos: ' + error);
                 });
+        }
+
+        // Función para mostrar el mensaje de confirmación
+        function showConfirmationMessage() {
+            var confirmationMessage = document.getElementById('confirmationMessage');
+            confirmationMessage.style.display = 'block';  // Mostrar mensaje
+            setTimeout(function() {
+                confirmationMessage.style.display = 'none';  // Ocultar mensaje después de 3 segundos
+            }, 3000);
+            scannedBarcode = "";  // Limpiar el código escaneado para poder escanear uno nuevo
         }
     </script>
 </body>
